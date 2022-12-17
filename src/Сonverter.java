@@ -3,7 +3,6 @@ public class  Сonverter {
     int oneStepCalories = 50; //трата калорий при одном шаге
     double convertStepsInKm(int stepsTotal) {
         return stepsTotal * oneStep / 100000;
-
     }
 
     double convertCalories(int stepsTotal) {

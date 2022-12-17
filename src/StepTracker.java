@@ -1,9 +1,12 @@
+import java.util.Scanner;
+
 public class StepTracker {
-    int [][] monthData = new int[12][30]; //так как тип данных int, то весь массив сам заполнится нулями
+    int[][] monthData = new int[12][30]; //так как тип данных int, то весь массив сам заполнится нулями
     int goalSteps = 10000; //обычная цель - 10000 в день
     Сonverter converter = new Сonverter(); //вызов для 2ух методов внизу
+    Scanner scanner = new Scanner(System.in);
 
-    void changeGoalSteps(int newGoalSteps) {  //вроде логика присутствует?? все ок?
+    void changeGoalSteps(int newGoalSteps) {
         if (newGoalSteps > 0) {
             goalSteps = newGoalSteps;
             System.out.println("Ваша новая цель, с которой вы обязательно справитесь: " + goalSteps);
@@ -11,6 +14,7 @@ public class StepTracker {
             System.out.println("Данные не могут быть отрицательными.");
         }
     }
+
     void saveSteps(int month, int day, int steps) {  // Сохранение количества шагов за день
         if (steps > 0) {
             monthData[month][day] = steps;
@@ -18,12 +22,12 @@ public class StepTracker {
         } else {
             System.out.println("Данные не могут быть отрицательными.");
         }
-
     }
+
     void printStepsMonth(int month) { // Количество пройденных шагов по дням в следующем формате
-            for(int i = 0; i < monthData[month].length; i++) {
-                System.out.println((i + 1) + " день: " + monthData[month][i] + ",");
-            }
+                for (int i = 0; i < monthData[month].length; i++) {
+                    System.out.println((i + 1) + " день: " + monthData[month][i] + ",");
+        }
     }
 
     int findSumSteps(int month) { // Общее количество шагов за месяц
@@ -45,8 +49,8 @@ public class StepTracker {
 
     void printAveragedStepsMonth(int month) {  // Среднее количество шагов
         int sum = findSumSteps(month);
-        System.out.println("Среднее количество шагов: " + (sum / 30));
-
+        System.out.println("Среднее количество шагов: " + (sum / monthData[month].length)); /* Делим  на
+        monthData[month].length вместо "30", чтобы не привязываться к месяцу, хорошая идея */
     }
 
     void printBurnCalories(int month) {
@@ -75,7 +79,6 @@ public class StepTracker {
           }
       }
       return max;
-
     }
 }
 

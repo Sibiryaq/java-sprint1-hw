@@ -1,10 +1,7 @@
-import java.util.Scanner;
-
 public class StepTracker {
     int[][] monthData = new int[12][30]; //так как тип данных int, то весь массив сам заполнится нулями
     int goalSteps = 10000; //обычная цель - 10000 в день
     Сonverter converter = new Сonverter(); //вызов для 2ух методов внизу
-    Scanner scanner = new Scanner(System.in);
 
     void changeGoalSteps(int newGoalSteps) {
         if (newGoalSteps > 0) {
@@ -36,6 +33,7 @@ public class StepTracker {
             sum = sum + monthData[month][i];
         }
         return sum;
+
     }
     void printMaxStepsMonth(int month) { //Максимальное пройденное количество шагов в месяце;
         int maxSteps = 0;
@@ -49,8 +47,7 @@ public class StepTracker {
 
     void printAveragedStepsMonth(int month) {  // Среднее количество шагов
         int sum = findSumSteps(month);
-        System.out.println("Среднее количество шагов: " + (sum / monthData[month].length)); /* Делим  на
-        monthData[month].length вместо "30", чтобы не привязываться к месяцу, хорошая идея */
+        System.out.println("Среднее количество шагов: " + (sum / monthData[month].length));
     }
 
     void printBurnCalories(int month) {

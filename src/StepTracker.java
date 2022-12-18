@@ -2,8 +2,9 @@ import java.util.Scanner;
 public class StepTracker {
     int[][] monthData = new int[12][30]; //так как тип данных int, то весь массив сам заполнится нулями
     int goalSteps = 10000; //обычная цель - 10000 в день
-    Converter converter; //вызов для 2ух методов внизу
+    Converter converter = new Converter(75, 50); //вызов для 2ух методов внизу
     Scanner scanner = new Scanner(System.in);
+
 
     void changeGoalSteps() {
         int newGoalSteps = setSteps();
@@ -94,14 +95,12 @@ public class StepTracker {
     }
 
     void printBurnCalories(int month) {
-        converter = new Converter(75, 50);
         int stepsTotal = findSumSteps(month);
         converter.convertCalories(stepsTotal);
         System.out.println("Количество сожженных килокалорий: " + converter.convertCalories(stepsTotal) + " Ккал");
     }
 
     void printDistanceOnMonth(int month) {
-        converter = new Converter(75,50);
         int stepsTotal = findSumSteps(month);
         converter.convertStepsInKm(stepsTotal);
         System.out.println("Пройденная дистанция: " + converter.convertStepsInKm(stepsTotal) + " км");

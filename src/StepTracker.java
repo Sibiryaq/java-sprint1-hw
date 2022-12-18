@@ -4,9 +4,6 @@ public class StepTracker {
     int goalSteps = 10000; //обычная цель - 10000 в день
     Converter converter; //вызов для 2ух методов внизу
     Scanner scanner = new Scanner(System.in);
-    public StepTracker() {
-       converter = new Converter(75, 50);
-    }
 
     void changeGoalSteps() {
         int newGoalSteps = setSteps();
@@ -77,7 +74,7 @@ public class StepTracker {
     int findSumSteps(int month) { // Общее количество шагов за месяц
         int sum = 0;
         for (int i = 0; i < monthData[month-1].length; i++) {
-            sum = sum + monthData[month-1][i];
+            sum+=monthData[month-1][i]; // ну да, меньше символов и выглядит красиво, просто мы еще не проходили такого, мой уровень это пока i++)))
         }
         return sum;
     }
@@ -97,12 +94,14 @@ public class StepTracker {
     }
 
     void printBurnCalories(int month) {
+        converter = new Converter(75, 50);
         int stepsTotal = findSumSteps(month);
         converter.convertCalories(stepsTotal);
         System.out.println("Количество сожженных килокалорий: " + converter.convertCalories(stepsTotal) + " Ккал");
     }
 
     void printDistanceOnMonth(int month) {
+        converter = new Converter(75,50);
         int stepsTotal = findSumSteps(month);
         converter.convertStepsInKm(stepsTotal);
         System.out.println("Пройденная дистанция: " + converter.convertStepsInKm(stepsTotal) + " км");

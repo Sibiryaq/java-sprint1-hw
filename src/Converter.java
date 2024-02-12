@@ -1,16 +1,12 @@
-public class  Converter {
-    double oneStep; // один шаг в см, не забыть при расчетах, так как в итоге километры
-    int oneStepCalories; //трата калорий при одном шаге
+public class Converter {
+    int smInOneStep = 75;
+    int callInOneStep = 50;
 
-    public Converter(double oneStep, int oneStepCalories) {
-    this.oneStep = oneStep;
-    this.oneStepCalories = oneStepCalories;
-    }
-    double convertStepsInKm(int stepsTotal) {
-        return stepsTotal * oneStep / 100000;
+    int convertToKm(int steps) {
+        return (steps * smInOneStep) / 100000;
     }
 
-    int convertCalories(int stepsTotal) {
-        return stepsTotal * oneStepCalories / 1000;
+    int convertStepsToKilocalories(int steps) {
+        return (steps * callInOneStep) / 1000;
     }
 }

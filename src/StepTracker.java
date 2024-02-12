@@ -1,126 +1,93 @@
 import java.util.Scanner;
+
 public class StepTracker {
-    int[][] monthData = new int[12][30]; //так как тип данных int, то весь массив сам заполнится нулями
-    int goalSteps = 10000; //обычная цель - 10000 в день
-    Converter converter = new Converter(75, 50); //вызов для 2ух методов внизу
-    Scanner scanner = new Scanner(System.in);
+    Scanner scanner;
+    Converter converter = new Converter();
+    MonthData[] monthData = new MonthData[12];
+    int goalByStepsPerDay = 10000;
 
+    StepTracker(Scanner scan) {
+        scanner = scan;
 
-    void changeGoalSteps() {
-        int newGoalSteps = setSteps();
-        if (newGoalSteps > 0) {
-            goalSteps = newGoalSteps;
-            System.out.println("Ваша новая цель, с которой вы обязательно справитесь: " + goalSteps);
-        } else {
-            System.out.println("Данные не могут быть отрицательными.");
+        for (int i = 0; i < monthData.length; i++) {
+            monthData[i] = new MonthData();
         }
+    }
+
+    void changeStepGoal() {
+        int newGoalOfSteps = setCountSteps();
+        if (newGoalOfSteps <= 0) {
+            System.out.println("Цель шагов должно быть больше 0!");
+        } else {
+            goalByStepsPerDay = newGoalOfSteps;
+            System.out.println("Новая цель: " + goalByStepsPerDay);
+        }
+    }
+
+    void addNewNumberStepsPerDay() {
+        MonthData monthDataObj = monthData[setMonth() - 1];
+        monthDataObj.days[setDay() - 1] = setCountSteps();
+    }
+
+    void printStatistic() {
+        int month = setMonth();
+        MonthData monthDataObj = monthData[month - 1];
+
+        System.out.println("Вывод общей статистики по дням: ");
+        monthDataObj.printDaysAndStepsFromMonth();
+        System.out.println("Сумма шагов за месяц: " + monthDataObj.sumStepsFromMonth());
+        System.out.println("Максимальное пройденное количества шагов за месяц: " + monthDataObj.maxSteps());
+        System.out.println("Cреднее пройденное количество шагов за месяц: " + (monthDataObj.sumStepsFromMonth() / 30));
+        System.out.println("Вывод пройденной за месяц дистанции в км: "
+                + converter.convertToKm(monthDataObj.sumStepsFromMonth()));
+        System.out.println("Вывод количества сожжённых килокалорий за месяц: "
+                + converter.convertStepsToKilocalories(monthDataObj.sumStepsFromMonth()));
+        System.out.println("Вывод лучшей серии: " + monthDataObj.bestSeries(goalByStepsPerDay));
+        System.out.println();
     }
 
     int setMonth() {
-        System.out.println("Введите месяц");
+        System.out.println("Введите номер месяца от 1 до 12");
+
         while (true) {
             int month = scanner.nextInt();
-            if (month > 0 && month < 13) {
-                return month;
+            if (month < 1 || month > 12) {
+                System.out.println("Номер вводимого месяца должен быть от 1 до 12 включительно");
             } else {
-                System.out.println("Проверьте ввод, должно быть от 1 до 12");
+                return month;
             }
         }
+
     }
 
     int setDay() {
-        System.out.println("Введите день");
+        System.out.println("Введите день от 1 до 30 (включительно)");
+
         while (true) {
             int day = scanner.nextInt();
-            if (day > 0 && day < 31) {
+            if (day < 1 || day > 30) {
+                System.out.println("Номер вводимого дня должен быть от 1 до 30 включительно");
+            } else {
                 return day;
-            } else {
-                System.out.println("Проверьте ввод, должно быть от 1 до 30");
             }
         }
+
     }
 
-    void saveSteps() {
-        monthData[setMonth() -1][setDay()-1] = setSteps();
-    }
+    int setCountSteps() {
+        System.out.println("И количество шагов:");
 
-    int setSteps() { // Сохранение количества шагов за день + валидация дня и месяца
-        System.out.println("Введите количество шагов");
         while (true) {
-            int steps = scanner.nextInt();
-            if (steps > 0) {
-                return steps;
+            int countSteps = scanner.nextInt();
+            if (countSteps <= 0) {
+                System.out.println("Количество шагов должно быть положительным числом");
             } else {
-                System.out.println("Данные не могут быть отрицательными.");
+                return countSteps;
             }
         }
+
     }
 
-    void getStatistic() {
-        int month = setMonth();
-        printStepsMonth(month);
-        System.out.println("Общее количество шагов за месяц: " + findSumSteps(month));
-        System.out.println("Максимальное количество шагов: " + printMaxStepsMonth(month));
-        printAveragedStepsMonth(month);
-        printDistanceOnMonth(month);
-        printBurnCalories(month);
-        System.out.println("Лучшая серия: " + maxSequence(month));
-    }
-    void printStepsMonth(int month) { // Количество пройденных шагов по дням в следующем формате
-                for (int i = 0; i < monthData[month-1].length; i++) {
-                    System.out.println((i + 1) + " день: " + monthData[month-1][i] + ",");
-        }
-    }
-
-    int findSumSteps(int month) { // Общее количество шагов за месяц
-        int sum = 0;
-        for (int i = 0; i < monthData[month-1].length; i++) {
-            sum+=monthData[month-1][i]; // ну да, меньше символов и выглядит красиво, просто мы еще не проходили такого, мой уровень это пока i++)))
-        }
-        return sum;
-    }
-    int printMaxStepsMonth(int month) { //Максимальное пройденное количество шагов в месяце;
-        int maxSteps = 0;
-        for (int i = 0; i < monthData[month-1].length; i++) {
-            if (monthData[month-1][i] > maxSteps) {
-                maxSteps = monthData[month-1][i];
-            }
-        }
-        return maxSteps;
-    }
-
-    void printAveragedStepsMonth(int month) {  // Среднее количество шагов
-        int sum = findSumSteps(month);
-        System.out.println("Среднее количество шагов: " + (sum / monthData[month-1].length));
-    }
-
-    void printBurnCalories(int month) {
-        int stepsTotal = findSumSteps(month);
-        converter.convertCalories(stepsTotal);
-        System.out.println("Количество сожженных килокалорий: " + converter.convertCalories(stepsTotal) + " Ккал");
-    }
-
-    void printDistanceOnMonth(int month) {
-        int stepsTotal = findSumSteps(month);
-        converter.convertStepsInKm(stepsTotal);
-        System.out.println("Пройденная дистанция: " + converter.convertStepsInKm(stepsTotal) + " км");
-    }
-
-    int maxSequence(int month) { // Лучшая серия
-      int max = 0;
-      int predmax = 0;
-      for (int i = 0; i < monthData[month-1].length; i++) {
-          if (monthData[month-1][i] >= goalSteps) {
-              predmax = predmax + 1;
-              if (predmax > max) {
-                  max = predmax;
-              }
-          } else {
-              predmax = 0;
-          }
-      }
-      return max;
-    }
 }
 
 

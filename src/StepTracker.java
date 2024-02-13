@@ -2,15 +2,17 @@ import java.util.Scanner;
 
 public class StepTracker {
     Scanner scanner;
-    Converter converter = new Converter();
-    MonthData[] monthData = new MonthData[12];
+    Converter converter;
+    MonthData[] monthToData;
     int goalByStepsPerDay = 10000;
 
     StepTracker(Scanner scan) {
         scanner = scan;
+        converter = new Converter();
+        monthToData = new MonthData[12];
 
-        for (int i = 0; i < monthData.length; i++) {
-            monthData[i] = new MonthData();
+        for (int i = 0; i < monthToData.length; i++) {
+            monthToData[i] = new MonthData();
         }
     }
 
@@ -25,24 +27,24 @@ public class StepTracker {
     }
 
     void addNewNumberStepsPerDay() {
-        MonthData monthDataObj = monthData[setMonth() - 1];
-        monthDataObj.days[setDay() - 1] = setCountSteps();
+        MonthData monthData = monthToData[setMonth() - 1];
+        monthData.days[setDay() - 1] = setCountSteps();
     }
 
     void printStatistic() {
         int month = setMonth();
-        MonthData monthDataObj = monthData[month - 1];
+        MonthData monthData = monthToData[month - 1];
 
         System.out.println("Вывод общей статистики по дням: ");
-        monthDataObj.printDaysAndStepsFromMonth();
-        System.out.println("Сумма шагов за месяц: " + monthDataObj.sumStepsFromMonth());
-        System.out.println("Максимальное пройденное количества шагов за месяц: " + monthDataObj.maxSteps());
-        System.out.println("Cреднее пройденное количество шагов за месяц: " + (monthDataObj.sumStepsFromMonth() / 30));
+        monthData.printDaysAndStepsFromMonth();
+        System.out.println("Сумма шагов за месяц: " + monthData.sumStepsFromMonth());
+        System.out.println("Максимальное пройденное количества шагов за месяц: " + monthData.maxSteps());
+        System.out.println("Cреднее пройденное количество шагов за месяц: " + (monthData.sumStepsFromMonth() / 30));
         System.out.println("Вывод пройденной за месяц дистанции в км: "
-                + converter.convertToKm(monthDataObj.sumStepsFromMonth()));
+                + converter.convertToKm(monthData.sumStepsFromMonth()));
         System.out.println("Вывод количества сожжённых килокалорий за месяц: "
-                + converter.convertStepsToKilocalories(monthDataObj.sumStepsFromMonth()));
-        System.out.println("Вывод лучшей серии: " + monthDataObj.bestSeries(goalByStepsPerDay));
+                + converter.convertStepsToKilocalories(monthData.sumStepsFromMonth()));
+        System.out.println("Вывод лучшей серии: " + monthData.bestSeries(goalByStepsPerDay));
         System.out.println();
     }
 
